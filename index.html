@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<style>
+body{
+position:relative;
+margin:0;
+padding:0;
+}
+#canvas{
+background-color:#eee;
+display:block;
+margin:0 auto 0px auto;
+overflow:hidden;
+padding:0;
+position:relative;
+
+}
+#controler
+{
+position:absolute;
+top:0;
+left:0;
+}
+</style>
+<script>
+var x;
+var y;
+var mouse_x;
+var mouse_y;
+var writeable = false;
+var targetColor;
+
+window.onload = function(){
+ 
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  eraseAll();  //empty the canvas context
+
+  var width  = window.innerWidth;
+  var height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+  ctx.lineWidth   = 1;
+  ctx.lineCap     = "round";
+  ctx.lineJoin    = "round";
+  ctx.globalAlpha = 1;
+  
+  //drawing trigger
+  canvas.onmousedown = function($event){
+    if( $event.button == 0 ){
+      writeable = true; 
+    }
+    x  = $event.layerX;
+    y  = $event.layerY;
+    }; 
+  
+  //drawing end trigger
+  canvas.onmouseup = function($event){
+    if( $event.button == 0 ){
+      writeable = false;
+    }
+  };
+  
+  canvas.addEventListener("mousemove",MouseMoveFunc);
+  
+  //add deleteCanvas event
+  var delCanvas = document.getElementById("deleteCanvas");
+  deleteCanvas.addEventListener("click",eraseAll);
+  
+  //add changing thickness event
+  var sss = document.getElementById('thickness');
+  thickness.addEventListener("change",changeThickness);
+  
+  function changeThickness(){
+    
+    var thinknessValue = thickness.value;
+    ctx.lineWidth = thinknessValue;
+  };
+  
+ 
+  function eraseAll(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);  //empty the canvas context
+    writeable = false;
+  }; 
+  
+  function MouseMoveFunc(e){
+    
+    mouse_x = e.layerX;
+    mouse_y = e.layerY;
+     if (writeable){
+     
+       if(x == mouse_x){return;}
+        ctx.beginPath();
+        ctx.strokeStyle = targetColor;
+        ctx.moveTo(x,y);
+        ctx.lineTo(mouse_x,mouse_y);
+        ctx.stroke();
+        ctx.closePath();
+        x = mouse_x;
+        y = mouse_y;
+    }
+    else{}
+  //printing out on console.
+};
+};
+
+function changeColor(color){
+  console.log("colorChanged");
+  targetColor = color;
+  writeable   = false;
+};
+
+</script>
+</head>
+<body>
+
+<canvas id = "canvas" width="1000" height="500"></canvas>
+<div id = "controler">
+<button id = "deleteCanvas">DELETE CANVAS</button>
+<input  id = "thickness" type="range" min="1" max="10" step="1" value="2">
+<button id = "red"   name = "btn" onClick = "changeColor('red')">red</button>
+<button id = "blue"  name = "btn" onClick = "changeColor('blue')">blue</button>
+<button id = "green" name = "btn" onClick = "changeColor('green')">green</button>
+<button id = "black" name = "btn" onClick = "changeColor('black')">black</button>
+</div>
+
+
+
+
+</body>
+</html>
