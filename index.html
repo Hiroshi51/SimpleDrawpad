@@ -39,8 +39,8 @@ window.onload = function(){
 
   var width  = window.innerWidth;
   var height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = 500;
+  canvas.height = 500;
   ctx.lineWidth   = 1;
   ctx.lineCap     = "round";
   ctx.lineJoin    = "round";
@@ -53,6 +53,7 @@ window.onload = function(){
     }
     x  = $event.layerX;
     y  = $event.layerY;
+    console.log($event);
     }; 
   
   //drawing end trigger
@@ -61,7 +62,7 @@ window.onload = function(){
       writeable = false;
     }
   };
-  
+  canvas.addEventListener("onmousedown",function(){alert ("YOU");});
   canvas.addEventListener("mousemove",MouseMoveFunc);
   
   //add deleteCanvas event
